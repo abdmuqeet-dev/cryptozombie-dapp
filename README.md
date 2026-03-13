@@ -1,3 +1,9 @@
+##Contributers
+1. Abdul Muqeet Ahmed, 877550566, abdulmuqeet@csu.fullerton.edu
+2. Ruman Saiyed, 819882275, ruman23@csu.fullerton.edu
+
+
+
 ## CryptoZombie DApp – Setup & Usage
 
 This is a full CryptoZombies‑style Ethereum DApp: a set of Solidity contracts plus a simple HTML/JS frontend that lets you create, battle, and manage zombie NFTs.

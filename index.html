@@ -1,208 +1,643 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
   <meta charset="UTF-8">
-  <title>CryptoZombies front-end</title>
-<link rel="icon" href="favicon.ico">
-  <script language="javascript" type="text/javascript"
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
-  <script language="javascript" type="text/javascript" src="cryptozombies_abi.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoZombies</title>
+  <link rel="icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Oswald:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+  <script src="cryptozombies_abi.js"></script>
+
+  <style>
+    :root {
+      --green: #39ff14;
+      --green-dim: #1a7a00;
+      --green-glow: rgba(57,255,20,0.35);
+      --red: #ff2040;
+      --bg: #050a05;
+      --bg2: #0a120a;
+      --bg3: #0f1a0f;
+      --card: #0d160d;
+      --border: #1f3d1f;
+      --text: #c8e6c8;
+      --muted: #5a8a5a;
+      --font-display: 'Creepster', cursive;
+      --font-ui: 'Oswald', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .fog {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 80%, rgba(20,80,10,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(10,60,5,0.08) 0%, transparent 70%);
+      animation: fogDrift 20s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes fogDrift {
+      from { transform: scale(1) translateX(0); }
+      to   { transform: scale(1.05) translateX(20px); }
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 40px 48px 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo { display: flex; flex-direction: column; line-height: 1; }
+    .logo-eyepair {
+      font-size: 32px;
+      letter-spacing: 4px;
+      animation: eyeblink 6s ease-in-out infinite;
+    }
+    @keyframes eyeblink {
+      0%,90%,100% { opacity: 1; }
+      95% { opacity: 0.1; }
+    }
+    .logo h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: var(--green);
+      text-shadow: 0 0 20px var(--green-glow), 0 0 60px rgba(57,255,20,0.15);
+      letter-spacing: 4px;
+      line-height: 1;
+      animation: flicker 8s linear infinite;
+    }
+    @keyframes flicker {
+      0%,96%,100% { opacity: 1; }
+      97% { opacity: 0.7; }
+      98% { opacity: 1; }
+      99% { opacity: 0.4; }
+    }
+    .logo p {
+      font-size: 0.75rem;
+      letter-spacing: 6px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .wallet-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 2px;
+      text-align: right;
+      max-width: 240px;
+    }
+    .wallet-badge .label { color: var(--green); display: block; margin-bottom: 4px; letter-spacing: 2px; font-size: 0.6rem; }
+
+    #txStatus {
+      position: relative;
+      z-index: 10;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      padding: 10px 48px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      color: var(--green);
+      min-height: 38px;
+      transition: color 0.3s;
+    }
+    #txStatus.error { color: var(--red); }
+    #txStatus::before { content: '> '; color: var(--green-dim); }
+
+    main {
+      position: relative;
+      z-index: 10;
+      padding: 40px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border: 1px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.2s, box-shadow 0.2s;
+      clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--green);
+      transform: translateX(-105%);
+      transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+      z-index: -1;
+    }
+    .btn:hover { color: var(--bg); box-shadow: 0 0 24px var(--green-glow); }
+    .btn:hover::before { transform: translateX(0); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-danger { border-color: var(--red); color: var(--red); }
+    .btn-danger::before { background: var(--red); }
+    .btn-danger:hover { box-shadow: 0 0 24px rgba(255,32,64,0.4); }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    #zombies {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .zombie-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.4s ease both;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .zombie-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 30px var(--green-glow), inset 0 0 30px rgba(57,255,20,0.03);
+    }
+
+    .zombie-dna-bar {
+      height: 4px;
+      background: linear-gradient(to right, #39ff14, #00cc44, #ff6b00, #ff2040, #7700ff, #39ff14);
+      background-size: 200% 100%;
+      animation: dnaShift 4s linear infinite;
+    }
+    @keyframes dnaShift {
+      from { background-position: 0% 0%; }
+      to   { background-position: 200% 0%; }
+    }
+
+    .zombie-inner { padding: 20px; }
+
+    .zombie-avatar {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      position: relative;
+    }
+
+    .zombie-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--green);
+      text-align: center;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--green-glow);
+    }
+
+    .zombie-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .stat {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+    }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .stat.wins .stat-value { color: var(--green); }
+    .stat.losses .stat-value { color: var(--red); }
+    .stat.dna { grid-column: 1 / -1; }
+    .stat.dna .stat-value { font-size: 0.65rem; word-break: break-all; color: var(--muted); }
+
+    .zombie-level-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--bg3);
+      border: 1px solid var(--green-dim);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--green);
+      padding: 3px 8px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 40px;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+    }
+    .empty-state .skull { font-size: 4rem; display: block; margin-bottom: 16px; animation: float 3s ease-in-out infinite; }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .empty-state p { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 2px; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--green);
+      box-shadow: 0 0 60px var(--green-glow);
+      padding: 40px;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+      animation: modalIn 0.2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .modal h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--green);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 15px var(--green-glow);
+    }
+    .modal p {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .modal input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .modal input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 12px var(--green-glow);
+    }
+    .modal input::placeholder { color: var(--muted); }
+
+    .modal .modal-actions { display: flex; gap: 12px; }
+    .modal .btn-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      background: none; border: none;
+      color: var(--muted); font-size: 1.2rem; cursor: pointer;
+      font-family: var(--font-mono);
+      transition: color 0.2s;
+    }
+    .modal .btn-close:hover { color: var(--red); }
+
+    footer {
+      position: relative; z-index: 10;
+      padding: 20px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 60px;
+    }
+    footer span {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .net-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    .net-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @media (max-width: 600px) {
+      header, main, footer { padding-left: 20px; padding-right: 20px; }
+      #txStatus { padding-left: 20px; }
+      .logo h1 { font-size: 2.2rem; }
+    }
+  </style>
 </head>
 
 <body>
-  <div id="txStatus"></div>
-  <div id="zombies"></div>
+  <div class="fog"></div>
 
-  <button class="showZombieButton">Show Zombies</button>
-  <button class="createzombieButton">Create Zombie</button>
-  <button class="levelupButton">Level Up</button>
+  <header>
+    <div class="logo">
+      <span class="logo-eyepair">👁 👁</span>
+      <h1>CryptoZombies</h1>
+      <p>Ethereum NFT Horde</p>
+    </div>
+    <div class="wallet-badge">
+      <span class="label">Connected Wallet</span>
+      <span id="walletAddr">Not connected</span>
+    </div>
+  </header>
+
+  <div id="txStatus">Ready.</div>
+
+  <main>
+    <div class="actions">
+      <button class="btn showZombieButton">⚔ Show Army</button>
+      <button class="btn createzombieButton">☣ Raise Zombie</button>
+      <button class="btn btn-danger levelupButton">⬆ Level Up</button>
+    </div>
+
+    <div class="section-label">Your Zombie Horde</div>
+    <div id="zombies">
+      <div class="empty-state">
+        <span class="skull">💀</span>
+        <p>Your crypt is empty. Raise your first zombie.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>CryptoZombies DApp &copy; 2024</span>
+    <div class="net-indicator">
+      <div class="net-dot" id="netDot"></div>
+      <span id="netLabel">Connecting...</span>
+    </div>
+  </footer>
+
+  <!-- Create Zombie Modal -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal">
+      <button class="btn-close" id="closeModal">✕</button>
+      <h2>Raise the Dead</h2>
+      <p>Name your zombie. One free raise per address.<br>The blockchain will do the rest.</p>
+      <input type="text" id="zombieName" placeholder="Enter zombie name..." maxlength="32" />
+      <div class="modal-actions">
+        <button class="btn" id="confirmCreate">☣ Summon</button>
+        <button class="btn btn-danger" id="cancelCreate">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-
     var cryptoZombies;
     var userAccount;
-    const showZombieButton = document.querySelector('.showZombieButton');
-    const createzombieButton = document.querySelector('.createzombieButton');
-    const levelupButton = document.querySelector('.levelupButton');
+
+    const ZOMBIE_EMOJIS = ['🧟','🧟‍♂️','🧟‍♀️','💀','👻','☠️','🤢','👾'];
+    function zombieEmoji(dna) {
+      return ZOMBIE_EMOJIS[parseInt(dna.toString().slice(-1)) % ZOMBIE_EMOJIS.length];
+    }
+    function setStatus(msg, isError = false) {
+      const el = document.getElementById('txStatus');
+      el.textContent = msg;
+      el.className = isError ? 'error' : '';
+    }
 
     function startApp() {
-	
-      //ZombieOwnership contratc address
-      var cryptoZombiesAddress = "0xFd3E5882c8040a4A990e91e69B7e2eb13B06A8B3";
+      document.getElementById('walletAddr').textContent =
+        userAccount.slice(0,6) + '…' + userAccount.slice(-4);
+      document.getElementById('netLabel').textContent = 'Connected';
 
+      var cryptoZombiesAddress = "0xA5977dB2A49c2Ead3dB313B7B60860470e4b4A7b";
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
-
- //the following code from Lesson 6, chapter 5 is obsolete
- //     var accountInterval = setInterval(function () {
-
-  //      if (web3.eth.accounts[0] !== userAccount) {
-          //userAccount = web3.eth.accounts[0];
-
-     //     getZombiesByOwner(userAccount)
-      //      .then(displayZombies);
-      //  }
-     // }, 100);
-
       cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
-        .on("data", function (event) {
-          let data = event.returnValues;
+        .on("data", function() {
           getZombiesByOwner(userAccount).then(displayZombies);
         }).on("error", console.error);
+
+      getZombiesByOwner(userAccount).then(displayZombies);
     }
 
     function displayZombies(ids) {
-      $("#zombies").empty();
-      for (id of ids) {
-
-        getZombieDetails(id)
-          .then(function (zombie) {
-
-
-            $("#zombies").append(`<div class="zombie">
-              <ul>
-                <li>Name: ${zombie.name}</li>
-                <li>DNA: ${zombie.dna}</li>
-                <li>Level: ${zombie.level}</li>
-                <li>Wins: ${zombie.winCount}</li>
-                <li>Losses: ${zombie.lossCount}</li>
-                <li>Ready Time: ${zombie.readyTime}</li>
-              </ul>
-            </div>`);
-          });
+      const container = $("#zombies");
+      container.empty();
+      if (!ids || ids.length === 0) {
+        container.html('<div class="empty-state"><span class="skull">💀</span><p>Your crypt is empty. Raise your first zombie.</p></div>');
+        return;
       }
-
+      ids.forEach((id, i) => {
+        getZombieDetails(id).then(function(zombie) {
+          container.append(`
+            <div class="zombie-card" style="animation-delay:${i * 0.07}s">
+              <div class="zombie-dna-bar"></div>
+              <div class="zombie-inner">
+                <div class="zombie-level-badge">LVL ${zombie.level}</div>
+                <div class="zombie-avatar">${zombieEmoji(zombie.dna)}</div>
+                <div class="zombie-name">${zombie.name}</div>
+                <div class="zombie-stats">
+                  <div class="stat wins">
+                    <div class="stat-label">Wins</div>
+                    <div class="stat-value">${zombie.winCount}</div>
+                  </div>
+                  <div class="stat losses">
+                    <div class="stat-label">Losses</div>
+                    <div class="stat-value">${zombie.lossCount}</div>
+                  </div>
+                  <div class="stat dna">
+                    <div class="stat-label">DNA Sequence</div>
+                    <div class="stat-value">${zombie.dna.toString().slice(0,8)}…${zombie.dna.toString().slice(-4)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>`);
+        });
+      });
     }
 
     function createRandomZombie(name) {
-
-
-      $("#txStatus").text("Creating new zombie on the blockchain. This may take a while...");
-
+      setStatus("Raising " + name + " from the grave…");
       return cryptoZombies.methods.createRandomZombie(name)
         .send({ from: userAccount })
-        .on("receipt", function (receipt) {
-          $("#txStatus").text("Successfully created " + name + "!");
-
+        .on("receipt", function() {
+          setStatus("✓ " + name + " has risen!");
           getZombiesByOwner(userAccount).then(displayZombies);
         })
-        .on("error", function (error) {
-
-          $("#txStatus").text(error);
-        });
-    }
-
-    function feedOnKitty(zombieId, kittyId) {
-      $("#txStatus").text("Eating a kitty. This may take a while...");
-      return cryptoZombies.methods.feedOnKitty(zombieId, kittyId)
-        .send({ from: userAccount })
-        .on("receipt", function (receipt) {
-          $("#txStatus").text("Ate a kitty and spawned a new Zombie!");
-          getZombiesByOwner(userAccount).then(displayZombies);
-        })
-        .on("error", function (error) {
-          $("#txStatus").text(error);
-        });
+        .on("error", function(error) { setStatus(error.message || error, true); });
     }
 
     function levelUp(zombieId) {
-      $("#txStatus").text("Leveling up your zombie...");
+      setStatus("Channeling dark power…");
       return cryptoZombies.methods.levelUp(zombieId)
         .send({ from: userAccount, value: web3.utils.toWei("0.001", "ether") })
-        .on("receipt", function (receipt) {
-          $("#txStatus").text("Power overwhelming! Zombie successfully leveled up");
-        })
-        .on("error", function (error) {
-          $("#txStatus").text(error);
-        });
+        .on("receipt", function() { setStatus("⬆ Power overwhelming! Zombie leveled up."); })
+        .on("error", function(error) { setStatus(error.message || error, true); });
     }
 
-    function getZombieDetails(id) {
-      return cryptoZombies.methods.zombies(id).call()
-    }
-
-    function zombieToOwner(id) {
-      return cryptoZombies.methods.zombieToOwner(id).call()
-    }
-
-    function getZombiesByOwner(owner) {
-      return cryptoZombies.methods.getZombiesByOwner(owner).call()
-    }
+    function getZombieDetails(id) { return cryptoZombies.methods.zombies(id).call(); }
+    function getZombiesByOwner(owner) { return cryptoZombies.methods.getZombiesByOwner(owner).call(); }
 
     window.addEventListener('load', async () => {
-    // Modern dapp browsers...
-    if (window.ethereum) {
+      if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-            // Request account access if needed
-            const accounts = await ethereum.enable();
-            // Acccounts now exposed
-            userAccount = accounts[0];
-            startApp()
-        } catch (error) {
-            // User denied account access...
-        }
-    }
-    // Legacy dapp browsers...
-    else if (window.web3) {
+          const accounts = await ethereum.enable();
+          userAccount = accounts[0];
+          startApp();
+        } catch(e) { setStatus("Wallet connection denied.", true); }
+      } else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider);
-        // Acccounts always exposed
         userAccount = web3.eth.accounts[0];
-        startApp()
+        startApp();
+      } else {
+        setStatus("No Ethereum wallet detected. Install MetaMask!", true);
+        document.getElementById('netDot').style.background = '#ff2040';
+        document.getElementById('netLabel').textContent = 'No Wallet';
+      }
+    });
+
+    if (typeof ethereum !== 'undefined') {
+      ethereum.on('accountsChanged', () => window.location.reload());
+      ethereum.on('chainChanged', () => window.location.reload());
     }
-    // Non-dapp browsers...
-    else {
-        console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-    }
-   });
- 
-   //the following code from Lesson 6, chapter 2 is obsolete
-   //metamask no longer inject web3 since early 2021
-   //window.addEventListener('load', function () {
 
-  //    if (typeof web3 !== 'undefined') {
-   //     web3js = new Web3(web3.currentProvider);
-   //   } else {
-
-    //  }
-
-
-    //  startApp()
-
-  //  }) 
-
-   ethereum.on('accountsChanged', (accounts) => {
-       window.location.reload();
-   });
-
-   ethereum.on('chainChanged', (chainId) => {
-       window.location.reload(); 
-   });  
-
- 
-    createzombieButton.addEventListener('click', () => {
-      createRandomZombie(userAccount);
-
+    document.querySelector('.showZombieButton').addEventListener('click', () => {
+      setStatus("Loading your horde…");
+      getZombiesByOwner(userAccount).then(displayZombies);
     });
 
-    showZombieButton.addEventListener('click', () => {
-      getZombiesByOwner(userAccount)
-            .then(displayZombies);
-
+    document.querySelector('.createzombieButton').addEventListener('click', () => {
+      document.getElementById('createModal').classList.add('open');
+      document.getElementById('zombieName').focus();
     });
 
-    levelupButton.addEventListener('click', () => {
-      getZombiesByOwner(userAccount)
-            .then(levelUp);
-
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('createModal').classList.remove('open');
+    });
+    document.getElementById('cancelCreate').addEventListener('click', () => {
+      document.getElementById('createModal').classList.remove('open');
+    });
+    document.getElementById('confirmCreate').addEventListener('click', () => {
+      const name = document.getElementById('zombieName').value.trim();
+      if (!name) return;
+      document.getElementById('createModal').classList.remove('open');
+      createRandomZombie(name);
+    });
+    document.getElementById('zombieName').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('confirmCreate').click();
     });
 
-
-
+    document.querySelector('.levelupButton').addEventListener('click', () => {
+      getZombiesByOwner(userAccount).then(ids => {
+        if (ids && ids.length > 0) levelUp(ids[0]);
+        else setStatus("No zombies to level up.", true);
+      });
+    });
   </script>
 </body>
-
 </html>

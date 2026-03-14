@@ -3,24 +3,6 @@ var cryptoZombiesABI = [
       "constant": false,
       "inputs": [
         {
-          "name": "_approved",
-          "type": "address"
-        },
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "approve",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
           "name": "_zombieId",
           "type": "uint256"
         }
@@ -168,41 +150,12 @@ var cryptoZombiesABI = [
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "ownerOf",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
       "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_owner",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -234,35 +187,13 @@ var cryptoZombiesABI = [
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_from",
-          "type": "address"
-        },
-        {
-          "name": "_to",
-          "type": "address"
-        },
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferFrom",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
       "constant": true,
       "inputs": [],
-      "name": "getAllZombies",
+      "name": "isOwner",
       "outputs": [
         {
           "name": "",
-          "type": "uint256[]"
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -347,7 +278,7 @@ var cryptoZombiesABI = [
           "type": "address"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "name": "_tokenId",
           "type": "uint256"
         }
@@ -369,34 +300,12 @@ var cryptoZombiesABI = [
           "type": "address"
         },
         {
-          "indexed": false,
+          "indexed": true,
           "name": "_tokenId",
           "type": "uint256"
         }
       ],
       "name": "Approval",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "attackResult",
-          "type": "bool"
-        },
-        {
-          "indexed": false,
-          "name": "winCount",
-          "type": "uint16"
-        },
-        {
-          "indexed": false,
-          "name": "lossCount",
-          "type": "uint16"
-        }
-      ],
-      "name": "AttackResult",
       "type": "event"
     },
     {
@@ -437,6 +346,84 @@ var cryptoZombiesABI = [
       ],
       "name": "OwnershipTransferred",
       "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "ownerOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_approved",
+          "type": "address"
+        },
+        {
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
     }
-  ]
+  ];
   

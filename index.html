@@ -244,6 +244,11 @@
 
     .zombie-inner { padding: 20px; }
 
+    .zombie-card.selected {
+  border-color: var(--green);
+  box-shadow: 0 0 30px var(--green-glow), inset 0 0 30px rgba(57,255,20,0.15);
+}
+
     .zombie-avatar {
       width: 64px;
       height: 64px;
@@ -497,6 +502,7 @@
   <script>
     var cryptoZombies;
     var userAccount;
+    var selectedZombieId = null;
 
     const ZOMBIE_EMOJIS = ['🧟','🧟‍♂️','🧟‍♀️','💀','👻','☠️','🤢','👾'];
     function zombieEmoji(dna) {
@@ -513,7 +519,7 @@
         userAccount.slice(0,6) + '…' + userAccount.slice(-4);
       document.getElementById('netLabel').textContent = 'Connected';
 
-      var cryptoZombiesAddress = "0xA5977dB2A49c2Ead3dB313B7B60860470e4b4A7b";
+      var cryptoZombiesAddress = "0x84B9c0FC8C87882f42D0b22CaFD5ECa190550983";
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
       cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
@@ -532,9 +538,18 @@
         return;
       }
       ids.forEach((id, i) => {
+        container.on('click', '.zombie-card', function () {
+  const id = $(this).data('id');
+  selectedZombieId = id;
+  setStatus("Selected zombie #" + id);
+  $('.zombie-card').removeClass('selected');
+  $(this).addClass('selected');
+});
         getZombieDetails(id).then(function(zombie) {
           container.append(`
-            <div class="zombie-card" style="animation-delay:${i * 0.07}s">
+            <div class="zombie-card"
+                 data-id="${id}"
+                 style="animation-delay:${i * 0.07}s">
               <div class="zombie-dna-bar"></div>
               <div class="zombie-inner">
                 <div class="zombie-level-badge">LVL ${zombie.level}</div>
@@ -633,11 +648,12 @@
     });
 
     document.querySelector('.levelupButton').addEventListener('click', () => {
-      getZombiesByOwner(userAccount).then(ids => {
-        if (ids && ids.length > 0) levelUp(ids[0]);
-        else setStatus("No zombies to level up.", true);
-      });
-    });
+  if (selectedZombieId == null) {
+    setStatus("Select a zombie first.", true);
+    return;
+  }
+  levelUp(selectedZombieId);
+});
   </script>
 </body>
 </html>

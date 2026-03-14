@@ -7618,8 +7618,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2026-03-14T08:01:27.593Z",
-  "networkType": "ethereum",
+  "updatedAt": "2026-03-14T21:13:39.748Z",
   "devdoc": {
     "methods": {},
     "title": "SafeMath"

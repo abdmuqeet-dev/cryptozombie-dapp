@@ -436,6 +436,35 @@
       50% { opacity: 0.3; }
     }
 
+    .transfer-section {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .transfer-section .section-label { margin-bottom: 16px; }
+    .transfer-section .transfer-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .transfer-section .transfer-row input {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .transfer-section .transfer-row input:focus {
+      border-color: var(--green);
+    }
+    .transfer-section .transfer-row input::placeholder { color: var(--muted); }
+    #transferZombieId { width: 100px; }
+    #transferToAddress { flex: 1; min-width: 280px; }
+
     @media (max-width: 600px) {
       header, main, footer { padding-left: 20px; padding-right: 20px; }
       #txStatus { padding-left: 20px; }
@@ -473,6 +502,15 @@
       <div class="empty-state">
         <span class="skull">💀</span>
         <p>Your crypt is empty. Raise your first zombie.</p>
+      </div>
+    </div>
+
+    <div class="transfer-section">
+      <div class="section-label">Transfer Zombie</div>
+      <div class="transfer-row">
+        <input id="transferZombieId" type="number" placeholder="Zombie ID" min="0" />
+        <input id="transferToAddress" type="text" placeholder="Recipient address (0x...)" size="45" />
+        <button type="button" class="btn" id="transferZombieBtn">Transfer Zombie</button>
       </div>
     </div>
   </main>
@@ -590,8 +628,36 @@
       setStatus("Channeling dark power…");
       return cryptoZombies.methods.levelUp(zombieId)
         .send({ from: userAccount, value: web3.utils.toWei("0.001", "ether") })
-        .on("receipt", function() { setStatus("⬆ Power overwhelming! Zombie leveled up."); })
+        .on("receipt", function() { setStatus("⬆ Power overwhelming! Zombie leveled up."); getZombiesByOwner(userAccount).then(displayZombies); })
         .on("error", function(error) { setStatus(error.message || error, true); });
+    }
+
+    async function transferZombie() {
+      if (!cryptoZombies || !userAccount) {
+        setStatus("Wallet not connected or contract not loaded.", true);
+        return;
+      }
+      const zombieId = document.getElementById("transferZombieId").value.trim();
+      const toAddress = document.getElementById("transferToAddress").value.trim();
+      if (!zombieId) {
+        setStatus("Please enter a zombie ID.", true);
+        return;
+      }
+      if (!toAddress || !toAddress.startsWith("0x")) {
+        setStatus("Please enter a valid recipient address (0x...).", true);
+        return;
+      }
+      setStatus("Transferring zombie #" + zombieId + "…");
+      try {
+        await cryptoZombies.methods.transferFrom(userAccount, toAddress, zombieId)
+          .send({ from: userAccount });
+        setStatus("✓ Zombie #" + zombieId + " transferred to " + toAddress.slice(0, 8) + "…");
+        document.getElementById("transferZombieId").value = "";
+        document.getElementById("transferToAddress").value = "";
+        getZombiesByOwner(userAccount).then(displayZombies);
+      } catch (err) {
+        setStatus("Transfer failed: " + (err.message || err), true);
+      }
     }
 
     function getZombieDetails(id) { return cryptoZombies.methods.zombies(id).call(); }
@@ -648,12 +714,14 @@
     });
 
     document.querySelector('.levelupButton').addEventListener('click', () => {
-  if (selectedZombieId == null) {
-    setStatus("Select a zombie first.", true);
-    return;
-  }
-  levelUp(selectedZombieId);
-});
+      if (selectedZombieId == null) {
+        setStatus("Select a zombie first.", true);
+        return;
+      }
+      levelUp(selectedZombieId);
+    });
+
+    document.getElementById('transferZombieBtn').addEventListener('click', transferZombie);
   </script>
 </body>
 </html>

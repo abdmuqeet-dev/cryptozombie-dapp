@@ -221,7 +221,7 @@
       overflow: hidden;
       animation: cardIn 0.4s ease both;
       transition: border-color 0.25s, box-shadow 0.25s;
-      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+      clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
     }
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -243,7 +243,7 @@
       to   { background-position: 200% 0%; }
     }
 
-    .zombie-inner { padding: 20px; }
+    .zombie-inner { padding: 20px; padding-bottom: 40px; }
 
     .zombie-actions {
       margin-top: 16px;
@@ -258,6 +258,7 @@
       font-size: 0.8rem;
       cursor: pointer;
       border-radius: 4px;
+      clip-path: none;
     }
 
     .delete-zombie-btn:hover {
@@ -897,13 +898,6 @@
         return;
       }
       ids.forEach((id, i) => {
-        container.on('click', '.zombie-card', function () {
-  const id = $(this).data('id');
-  selectedZombieId = id;
-  setStatus("Selected zombie #" + id);
-  $('.zombie-card').removeClass('selected');
-  $(this).addClass('selected');
-});
         getZombieDetails(id).then(function(zombie) {
           container.append(`
             <div class="zombie-card"
@@ -929,16 +923,13 @@
                   </div>
                 </div>
                 <div class="zombie-actions">
-                  <button class="btn btn-small delete-zombie-btn" data-id="${id}">🗑 Delete</button>
+                  <button type="button" onclick="event.stopPropagation(); deleteZombie(${id})" class="btn btn-small delete-zombie-btn" data-id="${id}">
+                    🗑 Delete
+                  </button>
                 </div>
               </div>
             </div>`);
         });
-      });
-
-      container.on('click', '.delete-zombie-btn', function() {
-        const id = $(this).data('id');
-        deleteZombie(id);
       });
     }
 
@@ -1382,6 +1373,15 @@
         // Load leaderboard data
         displayLeaderboard(tab);
       });
+    });
+
+    // Zombie card event listeners
+    $(document).on('click', '#zombies .zombie-card', function () {
+      const id = $(this).data('id');
+      selectedZombieId = id;
+      setStatus("Selected zombie #" + id);
+      $('.zombie-card').removeClass('selected');
+      $(this).addClass('selected');
     });
 
     // Marketplace event listeners

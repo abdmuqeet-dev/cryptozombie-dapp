@@ -221,7 +221,7 @@
       overflow: hidden;
       animation: cardIn 0.4s ease both;
       transition: border-color 0.25s, box-shadow 0.25s;
-      clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+      clip-path: none;
     }
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -838,7 +838,7 @@
   </main>
 
   <footer>
-    <span>CryptoZombies DApp &copy; 2024</span>
+    <span>CryptoZombies DApp &copy; 2026</span>
     <div class="net-indicator">
       <div class="net-dot" id="netDot"></div>
       <span id="netLabel">Connecting...</span>
@@ -1350,17 +1350,20 @@
     document.getElementById('transferZombieBtn').addEventListener('click', transferZombie);
 
     // Leaderboard event listeners
-    document.querySelector('.leaderboardButton').addEventListener('click', () => {
-      const leaderboardSection = document.getElementById('leaderboardSection');
-      const isVisible = leaderboardSection.style.display !== 'none';
-      
-      if (isVisible) {
-        leaderboardSection.style.display = 'none';
-      } else {
-        leaderboardSection.style.display = 'block';
-        displayLeaderboard('level');
-      }
-    });
+    const leaderboardBtn = document.querySelector('.leaderboardButton');
+    if (leaderboardBtn) {
+      leaderboardBtn.addEventListener('click', () => {
+        const leaderboardSection = document.getElementById('leaderboardSection');
+        const isVisible = leaderboardSection.style.display !== 'none';
+        
+        if (isVisible) {
+          leaderboardSection.style.display = 'none';
+        } else {
+          leaderboardSection.style.display = 'block';
+          displayLeaderboard('level');
+        }
+      });
+    }
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1376,26 +1379,32 @@
     });
 
     // Zombie card event listeners
-    $(document).on('click', '#zombies .zombie-card', function () {
-      const id = $(this).data('id');
-      selectedZombieId = id;
-      setStatus("Selected zombie #" + id);
-      $('.zombie-card').removeClass('selected');
-      $(this).addClass('selected');
+    document.addEventListener('click', function(e) {
+      const card = e.target.closest('.zombie-card');
+      if (card) {
+        const id = card.getAttribute('data-id');
+        selectedZombieId = parseInt(id);
+        setStatus("Selected zombie #" + id);
+        document.querySelectorAll('.zombie-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      }
     });
 
     // Marketplace event listeners
-    document.querySelector('.marketplaceButton').addEventListener('click', () => {
-      const marketplaceSection = document.getElementById('marketplaceSection');
-      const isVisible = marketplaceSection.style.display !== 'none';
-      
-      if (isVisible) {
-        marketplaceSection.style.display = 'none';
-      } else {
-        marketplaceSection.style.display = 'block';
-        displayMarketplace('browse');
-      }
-    });
+    const marketplaceBtn = document.querySelector('.marketplaceButton');
+    if (marketplaceBtn) {
+      marketplaceBtn.addEventListener('click', () => {
+        const marketplaceSection = document.getElementById('marketplaceSection');
+        const isVisible = marketplaceSection.style.display !== 'none';
+        
+        if (isVisible) {
+          marketplaceSection.style.display = 'none';
+        } else {
+          marketplaceSection.style.display = 'block';
+          displayMarketplace('browse');
+        }
+      });
+    }
 
     document.querySelectorAll('.market-tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {

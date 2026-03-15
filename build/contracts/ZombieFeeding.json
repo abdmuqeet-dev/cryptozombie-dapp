@@ -5584,8 +5584,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2026-03-15T13:40:53.524Z",
-  "networkType": "ethereum",
+  "updatedAt": "2026-03-15T14:53:06.512Z",
   "devdoc": {
     "methods": {
       "isOwner()": {

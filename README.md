@@ -71,7 +71,7 @@ This writes ABI and deployment info into `build/contracts/*.json`.
 ---
 ## 5. Hook up the frontend to the deployed contract
 After migration:
-1. Open `build/contracts/ZombieMarketplace.json`.
+1. Open `build/contracts/ZombieOwnership.json`.
 2. Find the `networks` entry for your local network id (e.g. `"5777"`).
 3. Copy the `address` value.
 4. In `index.html`, replace the hard‑coded address:

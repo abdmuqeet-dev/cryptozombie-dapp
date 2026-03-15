@@ -137,24 +137,6 @@ Note: by design, `createRandomZombie` can only be called once per address. New z
 
 ## 8. Deploying to a public testnet (optional)
 
-To deploy to a testnet like **Sepolia**:
-
-1. **Install HDWalletProvider**:
-   ```bash
-   npm install @truffle/hdwallet-provider
-   ```
-2. **Create a `.secret` file** in the project root containing the mnemonic (seed phrase) of a dedicated test wallet (do not commit this file).
-3. **Create an Infura (or similar) project** and get the RPC URL for Sepolia.
-4. **Update `truffle-config.js`**:
-   - Require `@truffle/hdwallet-provider`.
-   - Add a `sepolia` network using your mnemonic and Infura URL.
-5. **Deploy**:
-   ```bash
-   truffle migrate --network sepolia
-   ```
-6. **Update `index.html`** with the new Sepolia `ZombieOwnership` address (from `build/contracts/ZombieOwnership.json`, `networks["11155111"].address`).
-7. **Switch MetaMask** to the Sepolia network and use a Sepolia faucet for test ETH.
-
 ---
 
 ## Contract architecture overview

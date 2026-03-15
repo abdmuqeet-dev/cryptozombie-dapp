@@ -5579,12 +5579,12 @@
         }
       },
       "links": {},
-      "address": "0x45FaB97fB722A75f97Bcf140C98d40bb5e173118",
-      "transactionHash": "0x1e8d5b40b4ce152c60f28ba7488d07bc2213e9d5ba8c695358efc7bb67d76785"
+      "address": "0x2Ce0d03c5FF9D8C81A5DDD4Feb46fa7F60faB4Bf",
+      "transactionHash": "0x74a71f2d61c0cbfcd25f519c4679ebc770a1ab4e1a6c0902a9a53882b010cd57"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2026-03-14T21:13:39.766Z",
+  "updatedAt": "2026-03-15T00:36:17.394Z",
   "devdoc": {
     "methods": {
       "isOwner()": {

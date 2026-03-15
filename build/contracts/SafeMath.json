@@ -7613,12 +7613,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x2e49E41Dd11BD2280930910021Dfd3aaaD79C422",
-      "transactionHash": "0x1311d5aab4355e4196ee29edcc5b5c25ba6a969a09ce282257a37554f5a68d9f"
+      "address": "0xd5D9BB7e38ebB325B1e218D2EB81456741ff9432",
+      "transactionHash": "0x896e8e08008b746a7fbc69fb17084b44c16a5f42f30ae1d071e5a84f83e515ae"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2026-03-14T21:13:39.748Z",
+  "updatedAt": "2026-03-15T00:36:17.373Z",
   "devdoc": {
     "methods": {},
     "title": "SafeMath"

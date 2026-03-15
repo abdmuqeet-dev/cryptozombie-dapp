@@ -557,7 +557,7 @@
         userAccount.slice(0,6) + '…' + userAccount.slice(-4);
       document.getElementById('netLabel').textContent = 'Connected';
 
-      var cryptoZombiesAddress = "0x84B9c0FC8C87882f42D0b22CaFD5ECa190550983";
+      var cryptoZombiesAddress = "0xA5dee820F752a2F2b866AFFb6212595c62cAb308";
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
       cryptoZombies.events.Transfer({ filter: { _to: userAccount } })

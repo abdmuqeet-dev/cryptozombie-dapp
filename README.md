@@ -1,9 +1,9 @@
 **## Contributers**
-1. Abdul Muqeet Ahmed, 877550566, abdulmuqeet@csu.fullerton.edu
-2. Ruman Saiyed, 819882275, ruman23@csu.fullerton.edu
-3. Asim Ali Mohammed,
-4. Matheen Baba Mahammed,
-5. Siddhi Mane,
+1. Abdul Muqeet Ahmed, 877550566
+2. Ruman Saiyed, 819882275
+3. Asim Ali Mohammed, 868328634
+4. Matheen Baba Mahammed, 861600625
+5. Siddhi Mane, 832480206
 
 **Improvements:**
 1. Made an Interactive UI

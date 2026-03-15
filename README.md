@@ -1,21 +1,23 @@
-##Contributers
+**## Contributers**
 1. Abdul Muqeet Ahmed, 877550566, abdulmuqeet@csu.fullerton.edu
 2. Ruman Saiyed, 819882275, ruman23@csu.fullerton.edu
+3. Asim Ali Mohammed,
+4. Matheen Baba Mahammed,
+5. Siddhi Mane,
 
+**Improvements:**
+1. Made an Interactive UI
+2. Added option to add multiple zombies with one account
+3. Added a feature to delete zombie
+4. Added a feature to transfer zombie by its ID
+5. Added Level Up zombie Feature by clicking card
+6. Shown Unique Image for every zombie using their DNA
+7. ()
 
 
 ## CryptoZombie DApp – Setup & Usage
 
-This is a full CryptoZombies‑style Ethereum DApp: a set of Solidity contracts plus a simple HTML/JS frontend that lets you create, battle, and manage zombie NFTs.
-
-### Features
-- **Create Zombies**: Generate random zombie NFTs with unique DNA
-- **Battle System**: Attack other zombies to level up and gain wins
-- **Level Up**: Upgrade your zombies with ETH payments
-- **Transfer Zombies**: Send zombies to other wallet addresses
-- **Leaderboard**: View top zombies ranked by level or win count
-- **Zombie Marketplace**: Buy and sell zombies with ETH payments
-- **Wallet Integration**: Connect with MetaMask for full functionality
+This is a full CryptoZombies‑style Ethereum DApp: a set of Solidity contracts plus a simple HTML/JS frontend that lets you create, transfer, and manage zombie NFTs.
 
 ---
 
@@ -155,31 +157,4 @@ npx http-server .
 ```
 
 Then open the shown URL (e.g. `http://127.0.0.1:8080/index.html`) in a browser that has MetaMask installed.
-
-On page load:
-
-- MetaMask will prompt you to connect the site to your account.
-- Approve the connection.
-
-You can now use the buttons:
-
-- **Create Zombie**: mints your first zombie (one free zombie per address).
-- **Show Zombies**: loads and displays zombies owned by the connected address.
-- **Level Up**: sends a tx to level up your zombie (requires a small test ETH fee).
-
-Note: by design, `createRandomZombie` can only be called once per address. New zombies are usually obtained via feeding/battling logic.
-
----
-
-## 8. Deploying to a public testnet (optional)
-
----
-
-## Contract architecture overview
-
-- `zombiefactory.sol`: defines the `Zombie` struct, array, owner mappings, and `createRandomZombie`.
-- `zombiefeeding.sol`: adds feeding/breeding logic and cooldowns, including interaction with a CryptoKitties‑style contract.
-- `zombieattack.sol`: adds attack mechanics, win/loss tracking, and breeding on victory.
-- `zombieownership.sol`: wraps zombies as ERC‑721 tokens (NFTs) and exposes transfer/approval functions.
-- `ownable.sol`, `safemath.sol`, `erc721.sol`: support contracts for access control, safe arithmetic, and the ERC‑721 interface.
 

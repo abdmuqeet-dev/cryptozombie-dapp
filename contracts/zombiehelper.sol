@@ -45,4 +45,70 @@ contract ZombieHelper is ZombieFeeding {
     return result;
   }
 
+  // Leaderboard functions
+  function getTopZombiesByLevel(uint _count) external view returns(uint[]) {
+    require(_count > 0 && _count <= 100); // Limit to prevent gas issues
+    
+    uint[] memory topZombies = new uint[](_count);
+    uint[] memory levels = new uint[](_count);
+    
+    // Initialize with first zombies
+    uint found = 0;
+    for (uint i = 0; i < zombies.length && found < _count; i++) {
+      topZombies[found] = i;
+      levels[found] = zombies[i].level;
+      found++;
+    }
+    
+    // Sort by level (simple bubble sort for small arrays)
+    for (uint x = 0; x < found - 1; x++) {
+      for (uint y = 0; y < found - x - 1; y++) {
+        if (levels[y] < levels[y + 1]) {
+          // Swap levels
+          uint tempLevel = levels[y];
+          levels[y] = levels[y + 1];
+          levels[y + 1] = tempLevel;
+          
+          // Swap zombie IDs
+          uint tempId = topZombies[y];
+          topZombies[y] = topZombies[y + 1];
+          topZombies[y + 1] = tempId;
+        }
+      }
+    }
+    
+    return topZombies;
+  }
+
+  function getTopZombiesByWins(uint _count) external view returns(uint[]) {
+    require(_count > 0 && _count <= 100);
+    
+    uint[] memory topZombies = new uint[](_count);
+    uint[] memory wins = new uint[](_count);
+    
+    uint found = 0;
+    for (uint i = 0; i < zombies.length && found < _count; i++) {
+      topZombies[found] = i;
+      wins[found] = zombies[i].winCount;
+      found++;
+    }
+    
+    // Sort by win count
+    for (uint x = 0; x < found - 1; x++) {
+      for (uint y = 0; y < found - x - 1; y++) {
+        if (wins[y] < wins[y + 1]) {
+          uint tempWins = wins[y];
+          wins[y] = wins[y + 1];
+          wins[y + 1] = tempWins;
+          
+          uint tempId = topZombies[y];
+          topZombies[y] = topZombies[y + 1];
+          topZombies[y + 1] = tempId;
+        }
+      }
+    }
+    
+    return topZombies;
+  }
+
 }

@@ -8,6 +8,15 @@
 
 This is a full CryptoZombies‑style Ethereum DApp: a set of Solidity contracts plus a simple HTML/JS frontend that lets you create, battle, and manage zombie NFTs.
 
+### Features
+- **Create Zombies**: Generate random zombie NFTs with unique DNA
+- **Battle System**: Attack other zombies to level up and gain wins
+- **Level Up**: Upgrade your zombies with ETH payments
+- **Transfer Zombies**: Send zombies to other wallet addresses
+- **Leaderboard**: View top zombies ranked by level or win count
+- **Zombie Marketplace**: Buy and sell zombies with ETH payments
+- **Wallet Integration**: Connect with MetaMask for full functionality
+
 ---
 
 ## Prerequisites
@@ -83,13 +92,40 @@ This writes ABI and deployment info into `build/contracts/*.json`.
 
 After migration:
 
-1. Open `build/contracts/ZombieOwnership.json`.
+1. Open `build/contracts/ZombieMarketplace.json`.
 2. Find the `networks` entry for your local network id (e.g. `"5777"`).
 3. Copy the `address` value.
 4. In `index.html`, replace the hard‑coded address:
    ```js
-   var cryptoZombiesAddress = "0x..."; // paste the deployed ZombieOwnership address here
+   var cryptoZombiesAddress = "0x..."; // paste the deployed ZombieMarketplace address here
    ```
+
+---
+
+## 6. Using the Zombie Marketplace
+
+The marketplace allows users to buy and sell zombies using ETH:
+
+### **Browse Market**
+- View all zombies currently listed for sale
+- See zombie stats, prices, and seller information
+- Purchase zombies with one click
+
+### **My Listings**
+- View your active zombie listings
+- Cancel listings if needed
+
+### **Sell Zombie**
+- List your zombies for sale
+- Set custom prices in ETH
+- Only list zombies you own and aren't already listed
+
+### **Marketplace Rules**
+- Sellers must own the zombie they're listing
+- Buyers pay the exact listed price
+- Excess ETH is automatically refunded
+- Listings can be cancelled by the seller anytime
+- All transactions are handled securely through the smart contract
 5. Save the file.
 
 ---

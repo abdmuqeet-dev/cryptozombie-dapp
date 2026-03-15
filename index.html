@@ -465,10 +465,280 @@
     #transferZombieId { width: 100px; }
     #transferToAddress { flex: 1; min-width: 280px; }
 
+    /* Leaderboard styles */
+    .leaderboard-section { margin-top: 48px; }
+    .leaderboard-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--bg2);
+    }
+    .tab-btn:hover { border-color: var(--green); color: var(--green); }
+
+    .leaderboard-zombie-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.4s ease both;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 20px;
+    }
+    .leaderboard-zombie-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+    .leaderboard-rank {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--green);
+      min-width: 40px;
+      text-align: center;
+    }
+    .leaderboard-rank.gold { color: #ffd700; }
+    .leaderboard-rank.silver { color: #c0c0c0; }
+    .leaderboard-rank.bronze { color: #cd7f32; }
+    .leaderboard-avatar {
+      font-size: 2rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .leaderboard-info {
+      flex: 1;
+    }
+    .leaderboard-name {
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .leaderboard-owner {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .leaderboard-stats {
+      display: flex;
+      gap: 16px;
+    }
+    .leaderboard-stat {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+    .leaderboard-stat-label {
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
     @media (max-width: 600px) {
       header, main, footer { padding-left: 20px; padding-right: 20px; }
       #txStatus { padding-left: 20px; }
       .logo h1 { font-size: 2.2rem; }
+      .leaderboard-zombie-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+      }
+      .leaderboard-stats { justify-content: center; }
+    }
+
+    /* Marketplace styles */
+    .marketplace-section { margin-top: 48px; }
+    .marketplace-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .market-tab-btn {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .market-tab-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--bg2);
+    }
+    .market-tab-btn:hover { border-color: var(--green); color: var(--green); }
+
+    .marketplace-zombie-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.4s ease both;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 20px;
+    }
+    .marketplace-zombie-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+    .marketplace-zombie-card.selling {
+      border-color: #ff6b00;
+    }
+    .marketplace-zombie-card.selling:hover {
+      box-shadow: 0 0 20px rgba(255,107,0,0.4);
+    }
+
+    .marketplace-avatar {
+      font-size: 2rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .marketplace-info {
+      flex: 1;
+    }
+    .marketplace-name {
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .marketplace-owner {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .marketplace-price {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+    .marketplace-stats {
+      display: flex;
+      gap: 16px;
+    }
+    .marketplace-stat {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+    .marketplace-stat-label {
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .marketplace-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .marketplace-btn {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border: 1px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .marketplace-btn:hover {
+      background: var(--green);
+      color: var(--bg);
+    }
+    .marketplace-btn.sell {
+      border-color: #ff6b00;
+      color: #ff6b00;
+    }
+    .marketplace-btn.sell:hover {
+      background: #ff6b00;
+      color: var(--bg);
+    }
+
+    .sell-form {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin-top: 20px;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+    }
+    .sell-form-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+    .sell-form input {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.2s;
+      flex: 1;
+    }
+    .sell-form input:focus {
+      border-color: var(--green);
+    }
+    .sell-form input::placeholder { color: var(--muted); }
+    .sell-form label {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      color: var(--text);
+      min-width: 80px;
+    }
+
+    @media (max-width: 600px) {
+      .marketplace-zombie-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+      }
+      .marketplace-stats { justify-content: center; }
+      .sell-form-row { flex-direction: column; align-items: stretch; }
     }
   </style>
 </head>
@@ -495,6 +765,8 @@
       <button class="btn showZombieButton">⚔ Show Army</button>
       <button class="btn createzombieButton">☣ Raise Zombie</button>
       <button class="btn btn-danger levelupButton">⬆ Level Up</button>
+      <button class="btn leaderboardButton">🏆 Leaderboard</button>
+      <button class="btn marketplaceButton">🛒 Marketplace</button>
     </div>
 
     <div class="section-label">Your Zombie Horde</div>
@@ -511,6 +783,35 @@
         <input id="transferZombieId" type="number" placeholder="Zombie ID" min="0" />
         <input id="transferToAddress" type="text" placeholder="Recipient address (0x...)" size="45" />
         <button type="button" class="btn" id="transferZombieBtn">Transfer Zombie</button>
+      </div>
+    </div>
+
+    <div class="leaderboard-section" id="leaderboardSection" style="display: none;">
+      <div class="section-label">Zombie Leaderboard</div>
+      <div class="leaderboard-tabs">
+        <button class="tab-btn active" data-tab="level">By Level</button>
+        <button class="tab-btn" data-tab="wins">By Wins</button>
+      </div>
+      <div id="leaderboard">
+        <div class="empty-state">
+          <span class="trophy">🏆</span>
+          <p>Loading leaderboard...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="marketplace-section" id="marketplaceSection" style="display: none;">
+      <div class="section-label">Zombie Marketplace</div>
+      <div class="marketplace-tabs">
+        <button class="market-tab-btn active" data-tab="browse">Browse Market</button>
+        <button class="market-tab-btn" data-tab="listings">My Listings</button>
+        <button class="market-tab-btn" data-tab="sell">Sell Zombie</button>
+      </div>
+      <div id="marketplace">
+        <div class="empty-state">
+          <span class="shop">🛒</span>
+          <p>Loading marketplace...</p>
+        </div>
       </div>
     </div>
   </main>
@@ -557,7 +858,7 @@
         userAccount.slice(0,6) + '…' + userAccount.slice(-4);
       document.getElementById('netLabel').textContent = 'Connected';
 
-      var cryptoZombiesAddress = "0xA5dee820F752a2F2b866AFFb6212595c62cAb308";
+      var cryptoZombiesAddress = "0x6B21dF603EFc4cec2bb3D5F6Bd1793c1749381cd";
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
       cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
@@ -663,11 +964,283 @@
     function getZombieDetails(id) { return cryptoZombies.methods.zombies(id).call(); }
     function getZombiesByOwner(owner) { return cryptoZombies.methods.getZombiesByOwner(owner).call(); }
 
+    // Leaderboard functions
+    async function displayLeaderboard(type = 'level') {
+      const container = $("#leaderboard");
+      container.empty();
+      
+      try {
+        setStatus("Loading leaderboard...");
+        let topZombieIds;
+        
+        if (type === 'level') {
+          topZombieIds = await cryptoZombies.methods.getTopZombiesByLevel(10).call();
+        } else if (type === 'wins') {
+          topZombieIds = await cryptoZombies.methods.getTopZombiesByWins(10).call();
+        }
+        
+        if (!topZombieIds || topZombieIds.length === 0) {
+          container.html('<div class="empty-state"><span class="trophy">🏆</span><p>No zombies found yet.</p></div>');
+          setStatus("Leaderboard loaded.");
+          return;
+        }
+        
+        for (let i = 0; i < topZombieIds.length; i++) {
+          const id = topZombieIds[i];
+          if (id == 0 && i > 0) break; // Stop if we hit default values
+          
+          const zombie = await getZombieDetails(id);
+          const owner = await cryptoZombies.methods.zombieToOwner(id).call();
+          
+          let rankClass = '';
+          if (i === 0) rankClass = 'gold';
+          else if (i === 1) rankClass = 'silver';
+          else if (i === 2) rankClass = 'bronze';
+          
+          container.append(`
+            <div class="leaderboard-zombie-card" style="animation-delay:${i * 0.1}s">
+              <div class="leaderboard-rank ${rankClass}">#${i + 1}</div>
+              <div class="leaderboard-avatar">${zombieEmoji(zombie.dna)}</div>
+              <div class="leaderboard-info">
+                <div class="leaderboard-name">${zombie.name}</div>
+                <div class="leaderboard-owner">Owner: ${owner.slice(0,6)}…${owner.slice(-4)}</div>
+                <div class="leaderboard-stats">
+                  <div class="leaderboard-stat">
+                    <span class="leaderboard-stat-label">LVL</span>${zombie.level}
+                  </div>
+                  <div class="leaderboard-stat">
+                    <span class="leaderboard-stat-label">Wins</span>${zombie.winCount}
+                  </div>
+                  <div class="leaderboard-stat">
+                    <span class="leaderboard-stat-label">Losses</span>${zombie.lossCount}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `);
+        }
+        
+        setStatus("Leaderboard loaded.");
+      } catch (error) {
+        console.error("Leaderboard error:", error);
+        container.html('<div class="empty-state"><span class="trophy">🏆</span><p>Failed to load leaderboard.</p></div>');
+        setStatus("Failed to load leaderboard.", true);
+      }
+    }
+
+    // Marketplace functions
+    async function displayMarketplace(type = 'browse') {
+      const container = $("#marketplace");
+      container.empty();
+
+      try {
+        setStatus("Loading marketplace...");
+
+        if (type === 'browse') {
+          await displayMarketListings();
+        } else if (type === 'listings') {
+          await displayMyListings();
+        } else if (type === 'sell') {
+          await displaySellForm();
+        }
+
+        setStatus("Marketplace loaded.");
+      } catch (error) {
+        console.error("Marketplace error:", error);
+        container.html('<div class="empty-state"><span class="shop">🛒</span><p>Failed to load marketplace.</p></div>');
+        setStatus("Failed to load marketplace.", true);
+      }
+    }
+
+    async function displayMarketListings() {
+      const container = $("#marketplace");
+      const activeListings = await cryptoZombies.methods.getActiveListings().call();
+
+      if (!activeListings || activeListings.length === 0) {
+        container.html('<div class="empty-state"><span class="shop">🛒</span><p>No zombies for sale yet.</p></div>');
+        return;
+      }
+
+      for (let i = 0; i < activeListings.length; i++) {
+        const zombieId = activeListings[i];
+        if (zombieId == 0) continue;
+
+        const listing = await cryptoZombies.methods.getListing(zombieId).call();
+        if (!listing[3]) continue; // Not active
+
+        const zombie = await getZombieDetails(zombieId);
+
+        container.append(`
+          <div class="marketplace-zombie-card" style="animation-delay:${i * 0.1}s">
+            <div class="marketplace-avatar">${zombieEmoji(zombie.dna)}</div>
+            <div class="marketplace-info">
+              <div class="marketplace-name">${zombie.name}</div>
+              <div class="marketplace-owner">Seller: ${listing[1].slice(0,6)}…${listing[1].slice(-4)}</div>
+              <div class="marketplace-price">${web3.utils.fromWei(listing[2], 'ether')} ETH</div>
+              <div class="marketplace-stats">
+                <div class="marketplace-stat">
+                  <span class="marketplace-stat-label">LVL</span>${zombie.level}
+                </div>
+                <div class="marketplace-stat">
+                  <span class="marketplace-stat-label">Wins</span>${zombie.winCount}
+                </div>
+                <div class="marketplace-stat">
+                  <span class="marketplace-stat-label">Losses</span>${zombie.lossCount}
+                </div>
+              </div>
+            </div>
+            <div class="marketplace-actions">
+              <button class="marketplace-btn" onclick="buyZombie(${zombieId}, '${listing[2]}')">Buy Zombie</button>
+            </div>
+          </div>
+        `);
+      }
+    }
+
+    async function displayMyListings() {
+      const container = $("#marketplace");
+      const myZombies = await getZombiesByOwner(userAccount);
+
+      if (!myZombies || myZombies.length === 0) {
+        container.html('<div class="empty-state"><span class="shop">🛒</span><p>You don\'t own any zombies.</p></div>');
+        return;
+      }
+
+      let hasListings = false;
+      for (let i = 0; i < myZombies.length; i++) {
+        const zombieId = myZombies[i];
+        const listing = await cryptoZombies.methods.getListing(zombieId).call();
+
+        if (listing[3]) { // Active listing
+          hasListings = true;
+          const zombie = await getZombieDetails(zombieId);
+
+          container.append(`
+            <div class="marketplace-zombie-card selling" style="animation-delay:${i * 0.1}s">
+              <div class="marketplace-avatar">${zombieEmoji(zombie.dna)}</div>
+              <div class="marketplace-info">
+                <div class="marketplace-name">${zombie.name}</div>
+                <div class="marketplace-price">${web3.utils.fromWei(listing[2], 'ether')} ETH</div>
+                <div class="marketplace-stats">
+                  <div class="marketplace-stat">
+                    <span class="marketplace-stat-label">LVL</span>${zombie.level}
+                  </div>
+                  <div class="marketplace-stat">
+                    <span class="marketplace-stat-label">Wins</span>${zombie.winCount}
+                  </div>
+                  <div class="marketplace-stat">
+                    <span class="marketplace-stat-label">Losses</span>${zombie.lossCount}
+                  </div>
+                </div>
+              </div>
+              <div class="marketplace-actions">
+                <button class="marketplace-btn sell" onclick="cancelListing(${zombieId})">Cancel Listing</button>
+              </div>
+            </div>
+          `);
+        }
+      }
+
+      if (!hasListings) {
+        container.html('<div class="empty-state"><span class="shop">🛒</span><p>You don\'t have any active listings.</p></div>');
+      }
+    }
+
+    async function displaySellForm() {
+      const container = $("#marketplace");
+      const myZombies = await getZombiesByOwner(userAccount);
+
+      if (!myZombies || myZombies.length === 0) {
+        container.html('<div class="empty-state"><span class="shop">🛒</span><p>You don\'t own any zombies to sell.</p></div>');
+        return;
+      }
+
+      container.html(`
+        <div class="sell-form">
+          <div class="sell-form-row">
+            <label for="sellZombieId">Zombie ID:</label>
+            <input id="sellZombieId" type="number" placeholder="Enter zombie ID" min="0" />
+          </div>
+          <div class="sell-form-row">
+            <label for="sellPrice">Price (ETH):</label>
+            <input id="sellPrice" type="number" placeholder="0.01" min="0.001" step="0.001" />
+          </div>
+          <div class="sell-form-row">
+            <button class="btn" onclick="listZombieForSale()">List for Sale</button>
+          </div>
+        </div>
+      `);
+
+      // Populate zombie ID dropdown or show available zombies
+      const zombieSelect = document.getElementById('sellZombieId');
+      for (let i = 0; i < myZombies.length; i++) {
+        const zombieId = myZombies[i];
+        const listing = await cryptoZombies.methods.getListing(zombieId).call();
+        if (!listing[3]) { // Not already listed
+          const zombie = await getZombieDetails(zombieId);
+          // Just show placeholder for now, user can enter ID manually
+        }
+      }
+    }
+
+    // Global functions for button clicks
+    async function buyZombie(zombieId, price) {
+      try {
+        setStatus("Purchasing zombie...");
+        await cryptoZombies.methods.buyZombie(zombieId).send({
+          from: userAccount,
+          value: price
+        });
+        setStatus("✓ Zombie purchased successfully!");
+        displayMarketplace('browse');
+        getZombiesByOwner(userAccount).then(displayZombies);
+      } catch (error) {
+        setStatus("Purchase failed: " + (error.message || error), true);
+      }
+    }
+
+    async function cancelListing(zombieId) {
+      try {
+        setStatus("Canceling listing...");
+        await cryptoZombies.methods.cancelListing(zombieId).send({ from: userAccount });
+        setStatus("✓ Listing cancelled!");
+        displayMarketplace('listings');
+      } catch (error) {
+        setStatus("Cancel failed: " + (error.message || error), true);
+      }
+    }
+
+    async function listZombieForSale() {
+      const zombieId = document.getElementById('sellZombieId').value.trim();
+      const price = document.getElementById('sellPrice').value.trim();
+
+      if (!zombieId) {
+        setStatus("Please enter a zombie ID.", true);
+        return;
+      }
+      if (!price || parseFloat(price) <= 0) {
+        setStatus("Please enter a valid price.", true);
+        return;
+      }
+
+      try {
+        setStatus("Listing zombie for sale...");
+        const priceWei = web3.utils.toWei(price, 'ether');
+        await cryptoZombies.methods.listZombie(zombieId, priceWei).send({ from: userAccount });
+        setStatus("✓ Zombie listed for sale!");
+        document.getElementById('sellZombieId').value = '';
+        document.getElementById('sellPrice').value = '';
+        displayMarketplace('listings');
+      } catch (error) {
+        setStatus("Listing failed: " + (error.message || error), true);
+      }
+    }
+
     window.addEventListener('load', async () => {
       if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-          const accounts = await ethereum.enable();
+          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
           userAccount = accounts[0];
           startApp();
         } catch(e) { setStatus("Wallet connection denied.", true); }
@@ -722,6 +1295,58 @@
     });
 
     document.getElementById('transferZombieBtn').addEventListener('click', transferZombie);
+
+    // Leaderboard event listeners
+    document.querySelector('.leaderboardButton').addEventListener('click', () => {
+      const leaderboardSection = document.getElementById('leaderboardSection');
+      const isVisible = leaderboardSection.style.display !== 'none';
+      
+      if (isVisible) {
+        leaderboardSection.style.display = 'none';
+      } else {
+        leaderboardSection.style.display = 'block';
+        displayLeaderboard('level');
+      }
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tab = e.target.dataset.tab;
+        
+        // Update active tab
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // Load leaderboard data
+        displayLeaderboard(tab);
+      });
+    });
+
+    // Marketplace event listeners
+    document.querySelector('.marketplaceButton').addEventListener('click', () => {
+      const marketplaceSection = document.getElementById('marketplaceSection');
+      const isVisible = marketplaceSection.style.display !== 'none';
+      
+      if (isVisible) {
+        marketplaceSection.style.display = 'none';
+      } else {
+        marketplaceSection.style.display = 'block';
+        displayMarketplace('browse');
+      }
+    });
+
+    document.querySelectorAll('.market-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const tab = e.target.dataset.tab;
+        
+        // Update active tab
+        document.querySelectorAll('.market-tab-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // Load marketplace data
+        displayMarketplace(tab);
+      });
+    });
   </script>
 </body>
 </html>

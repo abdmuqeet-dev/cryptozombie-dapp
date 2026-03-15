@@ -898,10 +898,11 @@
         return;
       }
       ids.forEach((id, i) => {
-        getZombieDetails(id).then(function(zombie) {
+        const capturedId = id;
+        getZombieDetails(capturedId).then(function(zombie) {
           container.append(`
             <div class="zombie-card"
-                 data-id="${id}"
+                 data-id="${capturedId}"
                  style="animation-delay:${i * 0.07}s">
               <div class="zombie-dna-bar"></div>
               <div class="zombie-inner">
@@ -909,6 +910,10 @@
                 <div class="zombie-avatar">${zombieEmoji(zombie.dna)}</div>
                 <div class="zombie-name">${zombie.name}</div>
                 <div class="zombie-stats">
+                  <div class="stat">
+                    <div class="stat-label">Zombie ID</div>
+                    <div class="stat-value">#${capturedId}</div>
+                  </div>
                   <div class="stat wins">
                     <div class="stat-label">Wins</div>
                     <div class="stat-value">${zombie.winCount}</div>
@@ -923,7 +928,7 @@
                   </div>
                 </div>
                 <div class="zombie-actions">
-                  <button type="button" onclick="event.stopPropagation(); deleteZombie(${id})" class="btn btn-small delete-zombie-btn" data-id="${id}">
+                  <button type="button" onclick="event.stopPropagation(); deleteZombie(${capturedId})" class="btn btn-small delete-zombie-btn" data-id="${capturedId}">
                     🗑 Delete
                   </button>
                 </div>

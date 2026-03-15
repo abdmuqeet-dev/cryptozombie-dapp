@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
   <script src="cryptozombies_abi.js"></script>
+  <script src="zombieDashboard.js"></script>
 
   <style>
     :root {
@@ -495,6 +496,8 @@
       <button class="btn showZombieButton">⚔ Show Army</button>
       <button class="btn createzombieButton">☣ Raise Zombie</button>
       <button class="btn btn-danger levelupButton">⬆ Level Up</button>
+      <button class="btn" id="dashboardButton">☠ Zombie Dashboard</button>
+      <button class="btn" id="connectWalletButton">🔗 Connect Wallet</button>
     </div>
 
     <div class="section-label">Your Zombie Horde</div>
@@ -557,7 +560,7 @@
         userAccount.slice(0,6) + '…' + userAccount.slice(-4);
       document.getElementById('netLabel').textContent = 'Connected';
 
-      var cryptoZombiesAddress = "0xA5dee820F752a2F2b866AFFb6212595c62cAb308";
+      var cryptoZombiesAddress = "0x016076d955674026C0776b46017acd4A0FFB86Bd";
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
       cryptoZombies.events.Transfer({ filter: { _to: userAccount } })
@@ -664,23 +667,27 @@
     function getZombiesByOwner(owner) { return cryptoZombies.methods.getZombiesByOwner(owner).call(); }
 
     window.addEventListener('load', async () => {
-      if (window.ethereum) {
-        window.web3 = new Web3(ethereum);
-        try {
-          const accounts = await ethereum.enable();
-          userAccount = accounts[0];
-          startApp();
-        } catch(e) { setStatus("Wallet connection denied.", true); }
-      } else if (window.web3) {
-        window.web3 = new Web3(web3.currentProvider);
-        userAccount = web3.eth.accounts[0];
-        startApp();
-      } else {
-        setStatus("No Ethereum wallet detected. Install MetaMask!", true);
-        document.getElementById('netDot').style.background = '#ff2040';
-        document.getElementById('netLabel').textContent = 'No Wallet';
-      }
-    });
+  if (window.ethereum) {
+    window.web3 = new Web3(window.ethereum);
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      userAccount = accounts[0];
+      startApp();
+    } catch (e) {
+      setStatus("Wallet connection denied.", true);
+      console.error(e);
+    }
+  } else if (window.web3) {
+    window.web3 = new Web3(web3.currentProvider);
+    const accounts = await web3.eth.getAccounts();
+    userAccount = accounts[0];
+    startApp();
+  } else {
+    setStatus("No Ethereum wallet detected. Install MetaMask!", true);
+    document.getElementById('netDot').style.background = '#ff2040';
+    document.getElementById('netLabel').textContent = 'No Wallet';
+  }
+});
 
     if (typeof ethereum !== 'undefined') {
       ethereum.on('accountsChanged', () => window.location.reload());
@@ -691,7 +698,10 @@
       setStatus("Loading your horde…");
       getZombiesByOwner(userAccount).then(displayZombies);
     });
-
+    document.getElementById('dashboardButton').addEventListener('click', () => {
+      setStatus("Loading zombie dashboard…");
+      showZombieDashboard();
+    });
     document.querySelector('.createzombieButton').addEventListener('click', () => {
       document.getElementById('createModal').classList.add('open');
       document.getElementById('zombieName').focus();
@@ -720,7 +730,17 @@
       }
       levelUp(selectedZombieId);
     });
-
+    document.getElementById('connectWalletButton').addEventListener('click', async () => {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAccount = accounts[0];
+        startApp();
+        setStatus("Wallet connected.");
+      } catch (e) {
+         setStatus("Wallet connection denied.", true);
+        console.error(e);
+        }
+    });
     document.getElementById('transferZombieBtn').addEventListener('click', transferZombie);
   </script>
 </body>

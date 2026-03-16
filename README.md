@@ -10,10 +10,11 @@ https://github.com/abdmuqeet-dev/cryptozombie-dapp
 **Improvements:**
 1. Made an Interactive UI
 2. Added option to add multiple zombies with one account
-3. Added a feature to delete zombie
-4. Added a feature to transfer zombie by its ID
-5. Added Level Up zombie Feature by clicking card
-6. Shown Unique Image for every zombie using their DNA
+3. Added the option to name a zombie before creating
+4. Added a feature to delete zombie
+5. Added a feature to transfer zombie by its ID
+6. Added Level Up zombie Feature by clicking card
+7. Shown Unique Image for every zombie using their DNA
 
 Demo Video:
 https://www.youtube.com/watch?v=l_UiEZhYeRQ

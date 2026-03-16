@@ -7,17 +7,31 @@ https://github.com/abdmuqeet-dev/cryptozombie-dapp
 4. Matheen Baba Mahammed, 861600625
 5. Siddhi Mane, 832480206
 
-**Improvements:**
-1. Made an Interactive UI
-2. Added option to add multiple zombies with one account
-3. Added the option to name a zombie before creating
-4. Added a feature to delete zombie
-5. Added a feature to transfer zombie by its ID
-6. Added Level Up zombie Feature by clicking card
-7. Shown Unique Image for every zombie using their DNA
-
 Demo Video:
 https://www.youtube.com/watch?v=l_UiEZhYeRQ
+
+**Improvements:**
+1. Interactive UI
+The application features a dark-themed, retro-styled interface with animated elements, glowing text effects, and smooth transitions that create an immersive zombie-themed experience. The design includes scanline overlays, fog effects, and responsive layouts that work seamlessly across desktop and mobile devices.
+
+2. Multiple Zombies Per Account
+Users can create and manage multiple zombies under a single Ethereum account, allowing them to build an entire horde of undead creatures. This feature enables players to experiment with different zombie combinations and strategies without needing multiple wallets.
+
+3. Name Zombies Before Creation
+Before summoning a zombie, users can enter a custom name through a modal dialog to personalize their creation. This adds a personal touch to each zombie and makes managing a large collection more intuitive and memorable.
+
+4. Delete Zombie Feature
+Players can permanently remove unwanted zombies from their collection by transferring them to a burn address. This housekeeping feature helps keep zombie armies organized and manageable.
+
+5. Transfer Zombie by ID
+Users can send any of their zombies to another Ethereum address by specifying the zombie's ID and the recipient's wallet address. This feature enables trading, gifting, and collaborative gameplay between players.
+
+6. Level Up Zombie by Card Selection
+Clicking a zombie card selects it, allowing players to level it up by paying 0.001 ETH through the Level Up button. Each level-up increases the zombie's power and unlocks new abilities in the ecosystem.
+
+7. Unique Imagery Based on DNA
+Each zombie displays a unique emoji avatar determined by their DNA sequence, creating visual variety and making each creature feel distinct. This genetic-based randomization ensures that no two zombies appear identical, reinforcing the uniqueness of each NFT.
+
 
 ## CryptoZombie DApp – Setup & Usage
 
